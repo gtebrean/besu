@@ -28,9 +28,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.EvictingQueue;
 
 public class PostMergeContext implements MergeContext {
+  static final int MAX_BLOCKS_IN_PROGRESS = 12;
+
   private static PostMergeContext singleton;
 
   private final AtomicReference<SyncState> syncState;
@@ -41,14 +44,16 @@ public class PostMergeContext implements MergeContext {
   private final Subscribers<NewMergeStateCallback> newMergeStateCallbackSubscribers =
       Subscribers.create();
 
-  private final EvictingQueue<PayloadTuple> blocksInProgress = EvictingQueue.create(12);
+  private final EvictingQueue<PayloadTuple> blocksInProgress =
+      EvictingQueue.create(MAX_BLOCKS_IN_PROGRESS);
 
   // latest finalized block
   private final AtomicReference<BlockHeader> lastFinalized = new AtomicReference<>();
   private final AtomicReference<Optional<BlockHeader>> terminalPoWBlock =
       new AtomicReference<>(Optional.empty());
 
-  private PostMergeContext() {
+  @VisibleForTesting
+  PostMergeContext() {
     this.terminalTotalDifficulty = new AtomicReference<>(Difficulty.ZERO);
     this.syncState = new AtomicReference<>();
   }
@@ -162,11 +167,11 @@ public class PostMergeContext implements MergeContext {
     return retrieveTuplesById(payloadId).map(tuple -> tuple.block).findFirst();
   }
 
-  Stream<PayloadTuple> retrieveTuplesById(final PayloadIdentifier payloadId) {
+  private Stream<PayloadTuple> retrieveTuplesById(final PayloadIdentifier payloadId) {
     return blocksInProgress.stream().filter(z -> z.payloadIdentifier.equals(payloadId));
   }
 
-  static class PayloadTuple {
+  private static class PayloadTuple {
     final PayloadIdentifier payloadIdentifier;
     final Block block;
 

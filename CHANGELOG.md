@@ -1,5 +1,17 @@
 # Changelog
 
+## 22.1.1
+
+### Additions and Improvements
+- Merge: extend block creation and mining to support The Merge [#3412](https://github.com/hyperledger/besu/pull/3412)
+- Merge: backward sync [#3410](https://github.com/hyperledger/besu/pull/3410)
+- Merge: Extend validateAndProcessBlock to return an error message in case of failure, so it can be returned to the caller of ExecutePayload API [#3411](https://github.com/hyperledger/besu/pull/3411)
+- Merge: Persist latest finalized block [#2913](https://github.com/hyperledger/besu/issues/2913)
+- Merge: Add PostMergeContext, and stop syncing after the swith to PoS [#3453](https://github.com/hyperledger/besu/pull/3453)
+- Merge: Add header validation rules needed to validate The Merge blocks [#3454](https://github.com/hyperledger/besu/pull/3454)
+
+### Bug Fixes
+
 ## 22.1.0
 
 ### 22.1.0 Breaking Changes
