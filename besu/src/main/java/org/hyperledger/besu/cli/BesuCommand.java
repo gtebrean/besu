@@ -2660,7 +2660,8 @@ public class BesuCommand implements DefaultCommandValues, Runnable {
                   } catch (final Exception e) {
                     logger.error("Failed to stop Besu");
                   }
-                }));
+                },
+                "BesuCommand-Shutdown-Hook"));
   }
 
   // Used to discover the default IP of the client.
