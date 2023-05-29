@@ -200,7 +200,7 @@ public class TransactionPoolOptions
   @Override
   public ImmutableTransactionPoolConfiguration.Builder toDomainObject() {
     if (layeredTxPoolEnabled) {
-      LOG.warn(
+      LOG.warn(dddd
           "Layered transaction pool enabled, ignoring settings for "
               + "--tx-pool-max-size and --tx-pool-limit-by-account-percentage");
     }
